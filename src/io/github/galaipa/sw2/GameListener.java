@@ -3,6 +3,7 @@ package io.github.galaipa.sw2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import org.black_ixx.playerpoints.PlayerPoints;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -57,6 +58,8 @@ public class GameListener implements Listener{
                           killed.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.RED + "Hil egin zara");
                           plugin.Broadcast(ChatColor.GREEN +"[SkyWars] " + ChatColor.RED + killed.getName() + " hil egin da");
                       }
+                      plugin.playerPoints.getAPI().give(killed.getUniqueId(), 20);
+                      killed.getPlayer().sendMessage(ChatColor.GREEN + "Zorionak! parte hartzeagatik 20 puntu irabazi dituzu");
                   }
               }
               @EventHandler (priority = EventPriority.HIGH)

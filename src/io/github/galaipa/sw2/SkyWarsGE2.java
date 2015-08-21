@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
+import org.black_ixx.playerpoints.PlayerPoints;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -17,6 +18,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -50,6 +52,7 @@ public class SkyWarsGE2 extends JavaPlugin {
             getServer().getPluginManager().registerEvents(new GameListener(this), this);
             getServer().getPluginManager().registerEvents(new Gui(this), this);
             getServer().getPluginManager().registerEvents(new SignListener(this), this);
+            hookPlayerPoints();
             }
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
@@ -100,7 +103,8 @@ public class SkyWarsGE2 extends JavaPlugin {
                 if(taldeKopurua == 1){
                         for(Player p2 : Jokalariak){
                             p2.teleport(spawn);
-                            p2.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.YELLOW +"Zorionak! SkyWars irabazi duzu");
+                            p2.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.YELLOW +"Zorionak! SkyWars irabazi duzu." + ChatColor.GREEN + ("(+50 puntu)"));
+                            playerPoints.getAPI().give(p2.getUniqueId(), 50);
                         }
                     amaiera();
             }
@@ -266,4 +270,10 @@ public static void sendTitle(Player player, Integer fadeIn, Integer stay, Intege
                     };
 task.runTaskTimer(this, 0L, 20L);
    }
+    public PlayerPoints playerPoints;
+    private boolean hookPlayerPoints() {
+        final Plugin plugin = this.getServer().getPluginManager().getPlugin("PlayerPoints");
+        playerPoints = PlayerPoints.class.cast(plugin);
+        return playerPoints != null; 
+    }
 }
