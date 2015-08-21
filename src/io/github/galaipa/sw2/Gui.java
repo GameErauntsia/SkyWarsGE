@@ -53,25 +53,28 @@ public class Gui implements Listener{
                 ItemStack clicked = event.getCurrentItem(); 
                 event.setCancelled(true);
                 if(clicked.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.RED + "Noob")){
+                    plugin.join(player);
+                    player.getInventory().clear();
                     player.getInventory().addItem(new ItemStack(Material.STONE_AXE));
                     player.getInventory().addItem(new ItemStack(Material.STONE_PICKAXE));
                     player.getInventory().addItem(new ItemStack(Material.WOOD_SWORD));
                     player.getInventory().addItem(new ItemStack(Material.STONE_SPADE));
                     player.getInventory().addItem(new ItemStack(Material.STONE,5));
                     player.closeInventory();
-                    plugin.join(player);
                 }else if(clicked.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.RED  + "Eraikitzailea")){
+                    plugin.join(player);
+                    player.getInventory().clear();
                     player.getInventory().addItem(new ItemStack(Material.IRON_PICKAXE));
                     player.getInventory().addItem(new ItemStack(Material.BRICK,25));
                     player.closeInventory();
-                    plugin.join(player);
                 }else if(clicked.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.RED  + "Zalduna")){
+                    plugin.join(player);
+                    player.getInventory().clear();
                     player.getInventory().addItem(new ItemStack(Material.LEATHER_HELMET));
                     player.getInventory().addItem(new ItemStack(Material.LEATHER_CHESTPLATE));
                     player.getInventory().addItem(new ItemStack(Material.LEATHER_LEGGINGS));
                     player.getInventory().addItem(new ItemStack(Material.LEATHER_BOOTS));
                     player.closeInventory();
-                    plugin.join(player);
                 }
                     
             }

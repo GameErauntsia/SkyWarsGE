@@ -71,6 +71,10 @@ public class SkyWarsGE2 extends JavaPlugin {
                 
             }else if (args[0].equalsIgnoreCase("join")){
                 Gui.openGui(p);
+            }else if (args[0].equalsIgnoreCase("leave")){
+                resetPlayer(p);
+                p.teleport(spawn);
+                p.sendMessage(ChatColor.GREEN +"[Sky Wars] " + ChatColor.RED + "Jokotik irten zara");
             }
         } return true;
 }
@@ -80,6 +84,27 @@ public class SkyWarsGE2 extends JavaPlugin {
         getConfig().set("Spawns." + t +  ".Y", l.getY());
         getConfig().set("Spawns." + t +  ".Z", l.getZ());
         saveConfig();
+   }
+   public void resetPlayer(Player p){
+            Jokalariak.remove(p);
+            Team t = getTeam(p);
+            teams.remove(t);
+            taldeKopurua--;
+            p.getInventory().clear();
+            p.getInventory().setArmorContents(null);
+            if(inGame){
+                jokalariKopurua.setScore(Jokalariak.size());
+                   for(Player p2 : Jokalariak){
+                        p2.setScoreboard(board); 
+                }
+                if(taldeKopurua == 1){
+                        for(Player p2 : Jokalariak){
+                            p2.teleport(spawn);
+                            p2.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.YELLOW +"Zorionak! SkyWars irabazi duzu");
+                        }
+                    amaiera();
+            }
+   }
    }
     public void amaiera(){
         defaultValues();
@@ -172,11 +197,12 @@ public static void sendTitle(Player player, Integer fadeIn, Integer stay, Intege
                 Team team = new Team(taldeKopurua);
                 teams.add(team);
                 team.addPlayer(p);
-                p.sendMessage(ChatColor.GREEN +"[Sky Wars] " + ChatColor.YELLOW + "Jokoan sartu zara");
-                p.getInventory().setArmorContents(null);
-                p.setGameMode(GameMode.SURVIVAL);
                 loadSpawns();
                 p.teleport(team.getSpawnPoint());
+                p.sendMessage(ChatColor.GREEN +"[Sky Wars] " + ChatColor.YELLOW + "Jokoan sartu zara");
+                p.getInventory().clear();
+                p.getInventory().setArmorContents(null);
+                p.setGameMode(GameMode.SURVIVAL);
                 allPlayers();
                 return;
             }

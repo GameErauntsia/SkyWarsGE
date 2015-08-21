@@ -26,12 +26,11 @@ public class GameListener implements Listener{
         }
               @EventHandler
               public void PlayerCommand(PlayerCommandPreprocessEvent event) {
-                  if(plugin.inGame == true){
                       Player p = event.getPlayer();
                       if(plugin.Jokalariak.contains(p)){
-                              if(event.getMessage().toLowerCase().startsWith("/skywars")){
+                              if(event.getMessage().toLowerCase().startsWith("/skywars leave")){
                                 }
-                              else if(event.getMessage().toLowerCase().startsWith("/sw")){
+                              else if(event.getMessage().toLowerCase().startsWith("/sw leave")){
                                 }
                               else{
                                event.setCancelled(true);
@@ -39,20 +38,12 @@ public class GameListener implements Listener{
                               }
                           
                       }
-                  }
               }
               @EventHandler
               public void PlayerKill(PlayerDeathEvent e) {
                   Player killed = e.getEntity().getPlayer();
                   if(plugin.Jokalariak.contains(killed)){
-                        plugin.Jokalariak.remove(killed);
-                        Team t = plugin.getTeam(killed);
-                        plugin.teams.remove(t);
-                        plugin.taldeKopurua--;
-                        plugin.jokalariKopurua.setScore(plugin.Jokalariak.size());
-                           for(Player p : plugin.Jokalariak){
-                                p.setScoreboard(plugin.board); 
-                        }
+                        plugin.resetPlayer(killed);
                         exPlayers.add(killed);
                       if(e.getEntity().getKiller() instanceof Player){
                         Player killer = e.getEntity().getKiller();
@@ -66,13 +57,6 @@ public class GameListener implements Listener{
                           killed.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.RED + "Hil egin zara");
                           plugin.Broadcast(ChatColor.GREEN +"[SkyWars] " + ChatColor.RED + killed.getName() + " hil egin da");
                       }
-                        if(plugin.taldeKopurua == 1){
-                                for(Player p : plugin.Jokalariak){
-                                    p.teleport(plugin.spawn);
-                                    p.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.YELLOW +"Zorionak! SkyWars irabazi duzu");
-                                }
-                            plugin.amaiera();
-                        }
                   }
               }
               @EventHandler (priority = EventPriority.HIGH)
