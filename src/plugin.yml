@@ -1,0 +1,21 @@
+name: SkyWarsGE2
+main: io.github.galaipa.sw2.SkyWarsGE2
+version: 1.0
+author: Galaipa 
+description: SkyWars minigame plugin
+commands:
+  skywars:
+    description: BuildBattle main command
+    usage: /<command>  
+    aliases: [sw]
+  skywarsadmin:
+    description: BuildBattle main command
+    usage: /<command>  
+    aliases: [swadmin]  
+permissions:
+  sw.user:
+    description: Perm to use all user commands
+    default: true
+  sw.admin:
+    description: Perm to use /buildbattleadmin commands
+    default: op
