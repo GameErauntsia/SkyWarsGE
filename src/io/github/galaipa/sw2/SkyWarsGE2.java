@@ -73,11 +73,15 @@ public class SkyWarsGE2 extends JavaPlugin {
             if(args.length < 1){
                 
             }else if (args[0].equalsIgnoreCase("join")){
-                Gui.openGui(p);
+                p.sendMessage(ChatColor.GREEN +"[Sky Wars] " + ChatColor.RED + "Kartela erabili jokoan sartzeko");
+              //  Gui.openGui(p);
             }else if (args[0].equalsIgnoreCase("leave")){
                 resetPlayer(p);
                 p.teleport(spawn);
                 p.sendMessage(ChatColor.GREEN +"[Sky Wars] " + ChatColor.RED + "Jokotik irten zara");
+            }else if (args[0].equalsIgnoreCase("start")){
+                sender.sendMessage(ChatColor.GREEN +"[Sky Wars] " + ChatColor.GREEN + "Jokoa orain hasiko da");
+                hasiera();
             }
         } return true;
 }
@@ -89,53 +93,54 @@ public class SkyWarsGE2 extends JavaPlugin {
         saveConfig();
    }
    public void resetPlayer(Player p){
-            Jokalariak.remove(p);
-            Team t = getTeam(p);
-            teams.remove(t);
-            taldeKopurua--;
-            p.getInventory().clear();
-            p.getInventory().setArmorContents(null);
-            if(inGame){
-                jokalariKopurua.setScore(Jokalariak.size());
-                   for(Player p2 : Jokalariak){
-                        p2.setScoreboard(board); 
-                }
-                if(taldeKopurua == 1){
-                        for(Player p2 : Jokalariak){
-                            p2.teleport(spawn);
-                            p2.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.YELLOW +"Zorionak! SkyWars irabazi duzu." + ChatColor.GREEN + ("(+50 puntu)"));
-                            playerPoints.getAPI().give(p2.getUniqueId(), 50);
-                        }
-                    amaiera();
+        loadLobby();
+        Jokalariak.remove(p);
+        Team t = getTeam(p);
+        teams.remove(t);
+        taldeKopurua--;
+        p.getInventory().clear();
+        p.getInventory().setArmorContents(null);
+        if(inGame){
+            jokalariKopurua.setScore(Jokalariak.size());
+               for(Player p2 : Jokalariak){
+                    p2.setScoreboard(board); 
             }
+            if(taldeKopurua == 1){
+                    for(Player p2 : Jokalariak){
+                        p2.teleport(spawn);
+                        p2.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.YELLOW +"Zorionak! SkyWars irabazi duzu." + ChatColor.GREEN + ("(+50 puntu)"));
+                        playerPoints.getAPI().give(p2.getUniqueId(), 50);
+                    }
+                amaiera();
+        }
    }
    }
     public void amaiera(){
         defaultValues();
         InstantReset irPlugin = (InstantReset) getServer().getPluginManager().getPlugin("InstantReset");
         if (irPlugin!= null && irPlugin.isEnabled()) {
-            InstantResetWorld world = irPlugin.getInstantResetWorld(getConfig().getString("Win.urdina.World"));
+            InstantResetWorld world = irPlugin.getInstantResetWorld(getConfig().getString("Spawns.1.World"));
             if (world != null) {
                 irPlugin.resetWorld(world);
             }
         }
     }
-   public void loadSpawns(){
-       for(Team team : teams){
-                String w22 = getConfig().getString("Spawns." + Integer.toString(team.getID()) + ".World");
-                Double x22 = getConfig().getDouble("Spawns." + Integer.toString(team.getID()) + ".X");
-                Double y22 = getConfig().getDouble("Spawns." + Integer.toString(team.getID()) + ".Y");
-                Double z22 = getConfig().getDouble("Spawns." + Integer.toString(team.getID()) + ".Z");
-                Location SpawnPoint = new Location(Bukkit.getServer().getWorld(w22),x22,y22,z22);
+   public void loadSpawn(Team team){
+                String w = getConfig().getString("Spawns." + Integer.toString(team.getID()) + ".World");
+                Double x = getConfig().getDouble("Spawns." + Integer.toString(team.getID()) + ".X");
+                Double y = getConfig().getDouble("Spawns." + Integer.toString(team.getID()) + ".Y");
+                Double z = getConfig().getDouble("Spawns." + Integer.toString(team.getID()) + ".Z");
+                Location SpawnPoint = new Location(Bukkit.getServer().getWorld(w),x,y,z);
                 team.setSpawnPoint(SpawnPoint);
-       }
-                String w22 = getConfig().getString("Spawns.Spawn.World");
-                Double x22 = getConfig().getDouble("Spawns.Spawn.X");
-                Double y22 = getConfig().getDouble("Spawns.Spawn.Y");
-                Double z22 = getConfig().getDouble("Spawns.Spawn.Z");
-                Location SpawnPoint2 = new Location(Bukkit.getServer().getWorld(w22),x22,y22,z22);
-                spawn = SpawnPoint2;
    }
+   public void loadLobby(){
+            String w = getConfig().getString("Spawns.Spawn.World");
+            Double x = getConfig().getDouble("Spawns.Spawn.X");
+            Double y = getConfig().getDouble("Spawns.Spawn.Y");
+            Double z = getConfig().getDouble("Spawns.Spawn.Z");
+            Location SpawnPoint2 = new Location(Bukkit.getServer().getWorld(w),x,y,z);
+            spawn = SpawnPoint2;
+}
    public void defaultValues(){
        inGame = false;
        Jokalariak.clear();
@@ -201,7 +206,7 @@ public static void sendTitle(Player player, Integer fadeIn, Integer stay, Intege
                 Team team = new Team(taldeKopurua);
                 teams.add(team);
                 team.addPlayer(p);
-                loadSpawns();
+                loadSpawn(team);
                 p.teleport(team.getSpawnPoint());
                 p.sendMessage(ChatColor.GREEN +"[Sky Wars] " + ChatColor.YELLOW + "Jokoan sartu zara");
                 p.getInventory().clear();
@@ -232,7 +237,7 @@ public static void sendTitle(Player player, Integer fadeIn, Integer stay, Intege
             }
         };task.runTaskTimer(this, 0L, 20L);}
    public void hasiera(){
-        loadSpawns();
+        loadLobby();
         allPlayers();
         BukkitRunnable task;task = new BukkitRunnable() {
             int countdown = 10;

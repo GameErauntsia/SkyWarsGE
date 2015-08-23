@@ -29,14 +29,14 @@ public class GameListener implements Listener{
               public void PlayerCommand(PlayerCommandPreprocessEvent event) {
                       Player p = event.getPlayer();
                       if(plugin.Jokalariak.contains(p)){
-                              if(event.getMessage().toLowerCase().startsWith("/skywars leave")){
-                                }
-                              else if(event.getMessage().toLowerCase().startsWith("/sw leave")){
-                                }
-                              else{
-                               event.setCancelled(true);
-                               p.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.RED + "Ezin duzu komandorik erabili jolasten zaudenean");
-                              }
+                          if(event.getMessage().toLowerCase().startsWith("/skywars")){
+                            }
+                          else if(event.getMessage().toLowerCase().startsWith("/sw")){
+                            }
+                          else{
+                           event.setCancelled(true);
+                           p.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.RED + "Ezin duzu komandorik erabili jolasten zaudenean");
+                          }
                           
                       }
               }
