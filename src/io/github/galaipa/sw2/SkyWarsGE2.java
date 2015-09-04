@@ -1,7 +1,10 @@
 
 package io.github.galaipa.sw2;
 
+import de.goldengamerzone.worldreset.WorldReset;
+import static io.github.galaipa.sw2.GameListener.exPlayers;
 import java.util.ArrayList;
+import java.util.Random;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
@@ -26,21 +29,19 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
-import org.cyberiantiger.minecraft.instantreset.InstantReset;
-import org.cyberiantiger.minecraft.instantreset.InstantResetWorld;
 
 
 public class SkyWarsGE2 extends JavaPlugin {
     ArrayList <Team> teams = new ArrayList<>();
     ArrayList <Player> Jokalariak = new ArrayList<>();
     Location spawn;
-    Boolean inGame;
-    int taldeKopurua;
+    Boolean inGame, bozketa;
+    int taldeKopurua, bozkaKopurua;
     Objective objective;
     ScoreboardManager manager;
     Scoreboard board;
-    Score jokalariKopurua;
-     
+    Score jokalariKopurua; 
+    String arena;
     @Override
     public void onEnable() {
             getConfig().options().copyDefaults(true);
@@ -61,13 +62,15 @@ public class SkyWarsGE2 extends JavaPlugin {
                 if(!p.hasPermission("sw.admin")){
                     sender.sendMessage(ChatColor.GREEN +"[Sky Wars] " + ChatColor.RED + "Ez daukazu hori egiteko baimenik");
                 }else if (args[0].equalsIgnoreCase("spawnpoint")){
-                    SaveSpawn(p.getLocation(),args[1]);
+                    SaveSpawn(args[1],p.getLocation(),args[2]);
                     sender.sendMessage("Location: " + p.getLocation());
                 }else if (args[0].equalsIgnoreCase("start")){
                     sender.sendMessage(ChatColor.GREEN +"[Sky Wars] " + ChatColor.GREEN + "Jokoa orain hasiko da");
                     hasiera();    
                 }else if (args[0].equalsIgnoreCase("join")){
                    join(getServer().getPlayer(args[1]));
+                }else if (args[0].equalsIgnoreCase("proba")){
+                    amaiera();
                 }
         }else if (cmd.getName().equalsIgnoreCase("skywars")){
             if(args.length < 1){
@@ -79,17 +82,22 @@ public class SkyWarsGE2 extends JavaPlugin {
                 resetPlayer(p);
                 p.teleport(spawn);
                 p.sendMessage(ChatColor.GREEN +"[Sky Wars] " + ChatColor.RED + "Jokotik irten zara");
-            }else if (args[0].equalsIgnoreCase("start")){
+            }/*else if (args[0].equalsIgnoreCase("start")){
                 sender.sendMessage(ChatColor.GREEN +"[Sky Wars] " + ChatColor.GREEN + "Jokoa orain hasiko da");
-                hasiera();
-            }
+                if(taldeKopurua == 1){
+                    sender.sendMessage(ChatColor.GREEN +"[Sky Wars] " + ChatColor.RED + "Bi jokalari behar dira gutxienez jokoa hasteko");
+                }else{
+                    hasiera();
+                }
+                
+            }*/
         } return true;
 }
-   public void SaveSpawn(Location l,String t){
-        getConfig().set("Spawns." + t + ".World", l.getWorld().getName());
-        getConfig().set("Spawns." + t +  ".X", l.getX());
-        getConfig().set("Spawns." + t +  ".Y", l.getY());
-        getConfig().set("Spawns." + t +  ".Z", l.getZ());
+   public void SaveSpawn(String arena, Location l,String t){
+        getConfig().set("Spawns." + arena + "." + t + ".World", l.getWorld().getName());
+        getConfig().set("Spawns." + arena + "."+ t +  ".X", l.getX());
+        getConfig().set("Spawns." + arena + "."+ t +  ".Y", l.getY());
+        getConfig().set("Spawns." + arena + "."+ t +  ".Z", l.getZ());
         saveConfig();
    }
    public void resetPlayer(Player p){
@@ -105,33 +113,51 @@ public class SkyWarsGE2 extends JavaPlugin {
                for(Player p2 : Jokalariak){
                     p2.setScoreboard(board); 
             }
+            if(GameListener.exPlayers.contains(p)){
+                GameListener.exPlayers.remove(p);
+                p.teleport(spawn);
+                p.setGameMode(GameMode.SURVIVAL);
+            }
             if(taldeKopurua == 1){
-                    for(Player p2 : Jokalariak){
-                        p2.teleport(spawn);
-                        p2.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.YELLOW +"Zorionak! SkyWars irabazi duzu." + ChatColor.GREEN + ("(+50 puntu)"));
-                        playerPoints.getAPI().give(p2.getUniqueId(), 50);
-                    }
-                amaiera();
-        }
+                for(Player p2 : Jokalariak){
+                    p.teleport(spawn);
+                    p2.teleport(spawn);
+                    p2.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.YELLOW +"Zorionak! SkyWars irabazi duzu." + ChatColor.GREEN + ("(+50 puntu)"));
+                    playerPoints.getAPI().give(p2.getUniqueId(), 50);
+                }
+            amaiera();
+            }else{
+                exPlayers.add(p);
+                GameListener.respawnPlayer(p);
+            }
+            
    }
    }
     public void amaiera(){
-        defaultValues();
-        InstantReset irPlugin = (InstantReset) getServer().getPluginManager().getPlugin("InstantReset");
-        if (irPlugin!= null && irPlugin.isEnabled()) {
-            InstantResetWorld world = irPlugin.getInstantResetWorld(getConfig().getString("Spawns.1.World"));
-            if (world != null) {
-                irPlugin.resetWorld(world);
-            }
+        for(Player p : GameListener.exPlayers){
+            p.teleport(spawn);
+            p.setGameMode(GameMode.SURVIVAL);
+            p.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.YELLOW +"Mila esker jolasteagatik");
         }
+        defaultValues();
+        getServer().dispatchCommand(getServer().getConsoleSender(), "ir reset SkyWars"); 
+        WorldReset.resetWorld("SkyWars");
     }
-   public void loadSpawn(Team team){
-                String w = getConfig().getString("Spawns." + Integer.toString(team.getID()) + ".World");
-                Double x = getConfig().getDouble("Spawns." + Integer.toString(team.getID()) + ".X");
-                Double y = getConfig().getDouble("Spawns." + Integer.toString(team.getID()) + ".Y");
-                Double z = getConfig().getDouble("Spawns." + Integer.toString(team.getID()) + ".Z");
+   public void loadSpawn(String arena, Team team){
+                String w = getConfig().getString("Spawns."+ arena + "."  + Integer.toString(team.getID()) + ".World");
+                Double x = getConfig().getDouble("Spawns." + arena + "." + Integer.toString(team.getID()) + ".X");
+                Double y = getConfig().getDouble("Spawns." + arena + "." + Integer.toString(team.getID()) + ".Y");
+                Double z = getConfig().getDouble("Spawns." + arena + "." + Integer.toString(team.getID()) + ".Z");
                 Location SpawnPoint = new Location(Bukkit.getServer().getWorld(w),x,y,z);
                 team.setSpawnPoint(SpawnPoint);
+   }
+   public Location loadSpawn2(String arena){
+                String w = getConfig().getString("Spawns."+ arena + "."  + Integer.toString(0) + ".World");
+                Double x = getConfig().getDouble("Spawns." + arena + "." + Integer.toString(0) + ".X");
+                Double y = getConfig().getDouble("Spawns." + arena + "." + Integer.toString(0) + ".Y");
+                Double z = getConfig().getDouble("Spawns." + arena + "." + Integer.toString(0) + ".Z");
+                Location SpawnPoint = new Location(Bukkit.getServer().getWorld(w),x,y,z);
+                return SpawnPoint;
    }
    public void loadLobby(){
             String w = getConfig().getString("Spawns.Spawn.World");
@@ -143,9 +169,12 @@ public class SkyWarsGE2 extends JavaPlugin {
 }
    public void defaultValues(){
        inGame = false;
+       bozketa = false;
        Jokalariak.clear();
+       bozkaKopurua = 0;
        taldeKopurua = 0;
        teams.clear();
+       GameListener.exPlayers.clear();
    }
     public void allPlayers(){
         for(Team team : teams){
@@ -206,13 +235,19 @@ public static void sendTitle(Player player, Integer fadeIn, Integer stay, Intege
                 Team team = new Team(taldeKopurua);
                 teams.add(team);
                 team.addPlayer(p);
-                loadSpawn(team);
+                if(taldeKopurua == 1){
+                    Random rand = new Random();
+                    int randomNum = rand.nextInt((2 - 1) + 1) + 1;
+                    arena = Integer.toString(randomNum);
+                }
+                loadSpawn(arena,team);
                 p.teleport(team.getSpawnPoint());
                 p.sendMessage(ChatColor.GREEN +"[Sky Wars] " + ChatColor.YELLOW + "Jokoan sartu zara");
                 p.getInventory().clear();
                 p.getInventory().setArmorContents(null);
                 p.setGameMode(GameMode.SURVIVAL);
                 allPlayers();
+                Gui.maingui(p);
                 return;
             }
     }
@@ -241,12 +276,13 @@ public static void sendTitle(Player player, Integer fadeIn, Integer stay, Intege
         allPlayers();
         BukkitRunnable task;task = new BukkitRunnable() {
             int countdown = 10;
+            @Override
             public void run(){
                 for(Player p : Jokalariak){
                     p.setLevel(countdown);
-                    p.sendMessage(ChatColor.GREEN + " " + countdown);
+                    //p.sendMessage(ChatColor.GREEN + " " + countdown);
                     p.getWorld().playSound(p.getLocation(),Sound.NOTE_STICKS, 10, 1);
-                    sendTitle(p,20,40,20,Integer.toString(countdown),"");
+                    sendTitle(p,20,40,20,ChatColor.YELLOW +Integer.toString(countdown),"");
                 }
                 countdown--;
                 if (countdown < 0) {
@@ -267,6 +303,7 @@ public static void sendTitle(Player player, Integer fadeIn, Integer stay, Intege
                         team.getPlayer().setScoreboard(board);
                         Block b =  team.getPlayer().getLocation().getBlock().getRelative(BlockFace.DOWN);
                         b.setType(Material.AIR); 
+                        Gui.giveKit(team.getPlayer());
                     }
                     health();
                     this.cancel();

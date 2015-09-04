@@ -1,8 +1,9 @@
 name: SkyWarsGE2
 main: io.github.galaipa.sw2.SkyWarsGE2
-version: 1.0
+version: 2.0
 author: Galaipa 
 description: SkyWars minigame plugin
+depend: [WorldReset]
 commands:
   skywars:
     description: BuildBattle main command

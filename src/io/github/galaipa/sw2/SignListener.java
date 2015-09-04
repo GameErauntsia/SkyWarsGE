@@ -22,7 +22,7 @@ public class SignListener implements Listener {
                 Sign sign = (Sign) e.getClickedBlock().getState();
                 if(sign.getLine(0).equalsIgnoreCase("[SkyWars]")) {
                     if(sign.getLine(2).equals("Sartu")) {
-                        Gui.openGui(p);
+                        plugin.join(p);
                     }
                 }
             }

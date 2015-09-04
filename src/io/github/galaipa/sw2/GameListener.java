@@ -3,9 +3,12 @@ package io.github.galaipa.sw2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import org.black_ixx.playerpoints.PlayerPoints;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Sound;
+import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,7 +24,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 public class GameListener implements Listener{
         public SkyWarsGE2 plugin;
         HashMap<String, Team> map = new HashMap<>();
-        ArrayList exPlayers;
+        public static ArrayList <Player> exPlayers = new ArrayList<>();;
         public GameListener(SkyWarsGE2 instance) {
             plugin = instance;
         }
@@ -29,7 +32,10 @@ public class GameListener implements Listener{
               public void PlayerCommand(PlayerCommandPreprocessEvent event) {
                       Player p = event.getPlayer();
                       if(plugin.Jokalariak.contains(p)){
-                          if(event.getMessage().toLowerCase().startsWith("/skywars")){
+                          if(p.hasPermission("sw.admin")){
+                              return;
+                          }
+                          else if(event.getMessage().toLowerCase().startsWith("/skywars")){
                             }
                           else if(event.getMessage().toLowerCase().startsWith("/sw")){
                             }
@@ -42,17 +48,17 @@ public class GameListener implements Listener{
               }
               @EventHandler
               public void PlayerKill(PlayerDeathEvent e) {
-                  Player killed = e.getEntity().getPlayer();
+                  Player killed = e.getEntity();
                   if(plugin.Jokalariak.contains(killed)){
-                        plugin.resetPlayer(killed);
-                        exPlayers.add(killed);
-                      if(e.getEntity().getKiller() instanceof Player){
+                      if(e.getEntity().getKiller() != null){
+                        if(e.getEntity().getKiller() instanceof Player){
                         Player killer = e.getEntity().getKiller();
                         e.setDeathMessage("");
                         killed.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.RED + killer.getName() + "-(e)k hil zaitu");
                         killer.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.GREEN + killed.getName() + " hil duzu");
                         plugin.Broadcast(ChatColor.GREEN +"[SkyWars] " + ChatColor.RED + killer.getName() + "-(e)k " + killed.getName() + " hil du");
                         killer.getWorld().playSound(killer.getLocation(),Sound.NOTE_STICKS, 10, 1);
+                      }
                       }else{
                           e.setDeathMessage("");
                           killed.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.RED + "Hil egin zara");
@@ -60,15 +66,22 @@ public class GameListener implements Listener{
                       }
                       plugin.playerPoints.getAPI().give(killed.getUniqueId(), 20);
                       killed.getPlayer().sendMessage(ChatColor.GREEN + "Zorionak! parte hartzeagatik 20 puntu irabazi dituzu");
+                      plugin.resetPlayer(killed);
+
                   }
               }
+            public static void respawnPlayer(Player paramPlayer) {
+              if (paramPlayer.isDead())
+              ((CraftServer)Bukkit.getServer()).getHandle().moveToWorld(((CraftPlayer)paramPlayer).getHandle(), 0, false);
+            }
               @EventHandler (priority = EventPriority.HIGH)
               public void teleport(PlayerRespawnEvent e){
                   Player killed = e.getPlayer();
                   if(exPlayers != null){
                       if(exPlayers.contains(killed)){
-                          e.setRespawnLocation(plugin.spawn);
-                          exPlayers.remove(killed);
+                          e.setRespawnLocation(plugin.loadSpawn2(plugin.arena));
+                          killed.setGameMode(GameMode.SPECTATOR);
+                          killed.setScoreboard(plugin.board);
                       }
                   }
               }
