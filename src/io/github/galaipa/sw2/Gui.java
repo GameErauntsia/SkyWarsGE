@@ -153,7 +153,7 @@ public class Gui implements Listener{
                       }else if(p.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.RED  +"Jokotik irten")){
                           event.setCancelled(true);
                           plugin.resetPlayer(p);
-                          p.teleport(plugin.spawn);
+                          p.teleport(plugin.lobby);
                           p.sendMessage(ChatColor.GREEN +"[Sky Wars] " + ChatColor.RED + "Jokotik irten zara");
                       }
               }

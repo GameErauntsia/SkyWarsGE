@@ -1,22 +1,22 @@
 name: SkyWarsGE2
 main: io.github.galaipa.sw2.SkyWarsGE2
-version: 2.0
+version: 3.0
 author: Galaipa 
-description: SkyWars minigame plugin
+description: SkyWars minijoko plugina
 depend: [WorldReset]
 commands:
   skywars:
-    description: BuildBattle main command
+    description: Jokalarien SkyWars komandoa
     usage: /<command>  
     aliases: [sw]
   skywarsadmin:
-    description: BuildBattle main command
+    description: Administratzaileen SkyWars komandoa
     usage: /<command>  
     aliases: [swadmin]  
 permissions:
   sw.user:
-    description: Perm to use all user commands
+    description: Erabiltzaile komandoak erabiltzeko baimena
     default: true
   sw.admin:
-    description: Perm to use /buildbattleadmin commands
+    description: Administratzaile komandoak erabiltzeko baimena
     default: op

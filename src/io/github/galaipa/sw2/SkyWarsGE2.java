@@ -35,6 +35,7 @@ public class SkyWarsGE2 extends JavaPlugin {
     ArrayList <Team> teams = new ArrayList<>();
     ArrayList <Player> Jokalariak = new ArrayList<>();
     Location spawn;
+    Location lobby;
     Boolean inGame, bozketa;
     int taldeKopurua, bozkaKopurua;
     Objective objective;
@@ -80,7 +81,7 @@ public class SkyWarsGE2 extends JavaPlugin {
               //  Gui.openGui(p);
             }else if (args[0].equalsIgnoreCase("leave")){
                 resetPlayer(p);
-                p.teleport(spawn);
+                p.teleport(lobby);
                 p.sendMessage(ChatColor.GREEN +"[Sky Wars] " + ChatColor.RED + "Jokotik irten zara");
             }/*else if (args[0].equalsIgnoreCase("start")){
                 sender.sendMessage(ChatColor.GREEN +"[Sky Wars] " + ChatColor.GREEN + "Jokoa orain hasiko da");
@@ -115,17 +116,20 @@ public class SkyWarsGE2 extends JavaPlugin {
             }
             if(GameListener.exPlayers.contains(p)){
                 GameListener.exPlayers.remove(p);
-                p.teleport(spawn);
+                p.teleport(lobby);
                 p.setGameMode(GameMode.SURVIVAL);
             }
             if(taldeKopurua == 1){
+                GameListener.p2 = p;
+                GameListener.respawnPlayer(p);
                 for(Player p2 : Jokalariak){
-                    p.teleport(spawn);
-                    p2.teleport(spawn);
+                    p2.getInventory().clear();
+                    p2.getInventory().setArmorContents(null);
+                    p2.teleport(lobby);
                     p2.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.YELLOW +"Zorionak! SkyWars irabazi duzu." + ChatColor.GREEN + ("(+50 puntu)"));
                     playerPoints.getAPI().give(p2.getUniqueId(), 50);
                 }
-            amaiera();
+                amaiera();
             }else{
                 exPlayers.add(p);
                 GameListener.respawnPlayer(p);
@@ -135,12 +139,11 @@ public class SkyWarsGE2 extends JavaPlugin {
    }
     public void amaiera(){
         for(Player p : GameListener.exPlayers){
-            p.teleport(spawn);
+            p.teleport(lobby);
             p.setGameMode(GameMode.SURVIVAL);
             p.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.YELLOW +"Mila esker jolasteagatik");
         }
         defaultValues();
-        getServer().dispatchCommand(getServer().getConsoleSender(), "ir reset SkyWars"); 
         WorldReset.resetWorld("SkyWars");
     }
    public void loadSpawn(String arena, Team team){
@@ -151,13 +154,13 @@ public class SkyWarsGE2 extends JavaPlugin {
                 Location SpawnPoint = new Location(Bukkit.getServer().getWorld(w),x,y,z);
                 team.setSpawnPoint(SpawnPoint);
    }
-   public Location loadSpawn2(String arena){
+   public void loadSpawn2(String arena){
                 String w = getConfig().getString("Spawns."+ arena + "."  + Integer.toString(0) + ".World");
                 Double x = getConfig().getDouble("Spawns." + arena + "." + Integer.toString(0) + ".X");
                 Double y = getConfig().getDouble("Spawns." + arena + "." + Integer.toString(0) + ".Y");
                 Double z = getConfig().getDouble("Spawns." + arena + "." + Integer.toString(0) + ".Z");
                 Location SpawnPoint = new Location(Bukkit.getServer().getWorld(w),x,y,z);
-                return SpawnPoint;
+                spawn = SpawnPoint;
    }
    public void loadLobby(){
             String w = getConfig().getString("Spawns.Spawn.World");
@@ -165,7 +168,7 @@ public class SkyWarsGE2 extends JavaPlugin {
             Double y = getConfig().getDouble("Spawns.Spawn.Y");
             Double z = getConfig().getDouble("Spawns.Spawn.Z");
             Location SpawnPoint2 = new Location(Bukkit.getServer().getWorld(w),x,y,z);
-            spawn = SpawnPoint2;
+            lobby = SpawnPoint2;
 }
    public void defaultValues(){
        inGame = false;
@@ -239,6 +242,7 @@ public static void sendTitle(Player player, Integer fadeIn, Integer stay, Intege
                     Random rand = new Random();
                     int randomNum = rand.nextInt((2 - 1) + 1) + 1;
                     arena = Integer.toString(randomNum);
+                    loadSpawn2(arena);
                 }
                 loadSpawn(arena,team);
                 p.teleport(team.getSpawnPoint());

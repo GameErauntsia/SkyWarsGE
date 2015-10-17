@@ -3,11 +3,10 @@ package io.github.galaipa.sw2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import org.bukkit.Bukkit;
+import net.minecraft.server.v1_8_R3.PacketPlayInClientCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,7 +23,8 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 public class GameListener implements Listener{
         public SkyWarsGE2 plugin;
         HashMap<String, Team> map = new HashMap<>();
-        public static ArrayList <Player> exPlayers = new ArrayList<>();;
+        public static ArrayList <Player> exPlayers = new ArrayList<>();
+        public static Player p2 = null;
         public GameListener(SkyWarsGE2 instance) {
             plugin = instance;
         }
@@ -67,23 +67,28 @@ public class GameListener implements Listener{
                       plugin.playerPoints.getAPI().give(killed.getUniqueId(), 20);
                       killed.getPlayer().sendMessage(ChatColor.GREEN + "Zorionak! parte hartzeagatik 20 puntu irabazi dituzu");
                       plugin.resetPlayer(killed);
-
                   }
               }
-            public static void respawnPlayer(Player paramPlayer) {
-              if (paramPlayer.isDead())
-              ((CraftServer)Bukkit.getServer()).getHandle().moveToWorld(((CraftPlayer)paramPlayer).getHandle(), 0, false);
+            public static void respawnPlayer(Player player) {
+            /*  if (paramPlayer.isDead()){
+                  ((CraftServer)Bukkit.getServer()).getHandle().moveToWorld(((CraftPlayer)paramPlayer).getHandle(), 0, false);
+              }*/
+                if(player.isDead()){
+                   PacketPlayInClientCommand packet = new PacketPlayInClientCommand(PacketPlayInClientCommand.EnumClientCommand.PERFORM_RESPAWN);
+                  ((CraftPlayer)player).getHandle().playerConnection.a(packet);
+                }
             }
               @EventHandler (priority = EventPriority.HIGH)
               public void teleport(PlayerRespawnEvent e){
-                  Player killed = e.getPlayer();
-                  if(exPlayers != null){
+                      Player killed = e.getPlayer();
                       if(exPlayers.contains(killed)){
-                          e.setRespawnLocation(plugin.loadSpawn2(plugin.arena));
+                          e.setRespawnLocation(plugin.spawn);
                           killed.setGameMode(GameMode.SPECTATOR);
                           killed.setScoreboard(plugin.board);
+                      }else if(p2.equals(e.getPlayer())){
+                          e.setRespawnLocation(plugin.lobby);
+                          p2 = null;
                       }
-                  }
               }
               @EventHandler
               public void Protection(BlockBreakEvent event) {
