@@ -85,7 +85,7 @@ public class GameListener implements Listener{
                           e.setRespawnLocation(plugin.spawn);
                           killed.setGameMode(GameMode.SPECTATOR);
                           killed.setScoreboard(plugin.board);
-                      }else if(p2.equals(e.getPlayer())){
+                      }else if(e.getPlayer().equals(p2)){
                           e.setRespawnLocation(plugin.lobby);
                           p2 = null;
                       }
