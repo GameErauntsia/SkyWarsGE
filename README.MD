@@ -15,4 +15,5 @@ Zerbitzarirako SkyWars minijokoa
     /sw leave (Jokotik ateratzeko)
 
 ##Kartelak:
-    Jokalariak ez dute komandorik erabili beharko sartzeko. Horretarako kartela erabili beharko dute. Kartel hori sortzeko lehenengo ilaran "[SkyWars]" idatzi beharko da, eta bigarrenean "Sartu"
+Jokalariak ez dute komandorik erabili beharko sartzeko. Horretarako kartela erabili beharko dute. Kartel hori sortzeko lehenengo ilaran "[SkyWars]" idatzi beharko da, eta bigarrenean "Sartu"
+![alt tag](http://i.imgur.com/Oyaugcw.png)
