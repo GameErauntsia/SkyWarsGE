@@ -1,16 +1,20 @@
 # SkyWarsGE2
-Zerbitzarirako SkyWars minijokoa
 
 ![alt tag](http://i.imgur.com/J3kwFSi.png)
-###Komandoak:
+Zerbitzarirako SkyWars minijokoa
+##Komandoak:
  
-Adminenak:
+###Adminenak:
 
     /swadmin spawpoint <AreaZenbakia> <SpawnZenbakia> (Telegarraitze puntuak ezartzeko)
     /swadmin spawpoint <AreaZenbakia> 0 (Ikusle telegarraitze puntua ezartzeko)
     /swadmin start (Jokoa hastera behartzeko)
     /swadmin join <Jokalaria> (Jokalari bati sartzera behartzeko)
   
-Jokalarienak: 
+###Jokalarienak: 
     /sw leave (Jokotik ateratzeko)
-        Jokalariak ez dute komandorik erabili beharko sartzeko. Horretarako kartela erabili beharko dute.
+
+    Jokalariak ez dute komandorik erabili beharko sartzeko. Horretarako kartela erabili beharko dute.
+    
+##Kartelak:
+Jokalariak jolastera sartzeko kartela erabili beharko dute. Kartel hori sortzeko lehenego ilaran "[SkyWars]" idatzi beharko da, eta bigarrenean "Sartu"
