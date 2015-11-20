@@ -42,7 +42,7 @@ public class Gui implements Listener{
         joinGUI.setItem(3,item(Material.STONE_SWORD,0,1,ChatColor.RED  + "Noob","Harrizko erramintak, egurrezko ezpata eta 5 bloke "));
         joinGUI.setItem(4,item(Material.BRICK,14,1,ChatColor.RED + "Eraikitzailea","Burdinazko pikotxa eta 25 bloke"));
         joinGUI.setItem(5,item(Material.LEATHER_CHESTPLATE,0,1,ChatColor.RED  + "Zalduna","Larruzko armadura"));
-        joinGUI.setItem(6,item(Material.STAINED_GLASS_PANE,15,1,ChatColor.WHITE + "Aukeratu kit-a",""));
+        joinGUI.setItem(6,item(Material.REDSTONE,0,1,ChatColor.RED  + "Troll","Larruzko armadura"));
         joinGUI.setItem(7,item(Material.STAINED_GLASS_PANE,15,1,ChatColor.WHITE + "Aukeratu kit-a",""));
         joinGUI.setItem(8,item(Material.STAINED_GLASS_PANE,15,1,ChatColor.WHITE + "Aukeratu kit-a",""));
     }
@@ -78,6 +78,13 @@ public class Gui implements Listener{
                     kits.put(player, "Zalduna");
                     player.sendMessage(ChatColor.GREEN +"[Sky Wars] " + ChatColor.GREEN + "Zaldun kit-a aukeratu duzu");
                     player.closeInventory();
+                }else if(clicked.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.RED  + "Troll")){
+                    if(kits.get(player) != null){
+                        kits.remove(player);
+                    }
+                    kits.put(player, "Troll");
+                    player.sendMessage(ChatColor.GREEN +"[Sky Wars] " + ChatColor.GREEN + "Troll kit-a aukeratu duzu");
+                    player.closeInventory();
                 }
                     
             }
@@ -106,6 +113,13 @@ public class Gui implements Listener{
                     player.getInventory().addItem(new ItemStack(Material.WOOD_SWORD));
                     player.getInventory().addItem(new ItemStack(Material.STONE_SPADE));
                     player.getInventory().addItem(new ItemStack(Material.STONE,5));
+                    break;
+            case "Troll":
+                    player.getInventory().addItem(new ItemStack(Material.REDSTONE_TORCH_OFF,10));
+                    player.getInventory().addItem(new ItemStack(Material.PISTON_STICKY_BASE,2));
+                    player.getInventory().addItem(new ItemStack(Material.REDSTONE,20));
+                    player.getInventory().addItem(new ItemStack(Material.TNT,3));
+                    player.getInventory().addItem(new ItemStack(Material.LEVER));
                     break;
             default:
         }
