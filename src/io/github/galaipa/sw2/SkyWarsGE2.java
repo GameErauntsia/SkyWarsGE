@@ -36,7 +36,7 @@ public class SkyWarsGE2 extends JavaPlugin {
     ArrayList <Player> Jokalariak = new ArrayList<>();
     Location spawn;
     Location lobby;
-    Boolean inGame, bozketa;
+    Boolean inGame, bozketa,map;
     int taldeKopurua, bozkaKopurua;
     Objective objective;
     ScoreboardManager manager;
@@ -155,10 +155,10 @@ public class SkyWarsGE2 extends JavaPlugin {
                 team.setSpawnPoint(SpawnPoint);
    }
    public void loadSpawn2(String arena){
-                String w = getConfig().getString("Spawns."+ arena + "."  + Integer.toString(0) + ".World");
-                Double x = getConfig().getDouble("Spawns." + arena + "." + Integer.toString(0) + ".X");
-                Double y = getConfig().getDouble("Spawns." + arena + "." + Integer.toString(0) + ".Y");
-                Double z = getConfig().getDouble("Spawns." + arena + "." + Integer.toString(0) + ".Z");
+                String w = getConfig().getString("Spawns."+ arena + ".0.World");
+                Double x = getConfig().getDouble("Spawns." + arena + ".0.X");
+                Double y = getConfig().getDouble("Spawns." + arena + ".0.Y");
+                Double z = getConfig().getDouble("Spawns." + arena + ".0.Z");
                 Location SpawnPoint = new Location(Bukkit.getServer().getWorld(w),x,y,z);
                 spawn = SpawnPoint;
    }
@@ -240,7 +240,7 @@ public static void sendTitle(Player player, Integer fadeIn, Integer stay, Intege
                 team.addPlayer(p);
                 if(taldeKopurua == 1){
                     Random rand = new Random();
-                    int randomNum = rand.nextInt((2 - 1) + 1) + 1;
+                    int randomNum = rand.nextInt((4 - 1) + 1) + 1;
                     arena = Integer.toString(randomNum);
                     loadSpawn2(arena);
                 }

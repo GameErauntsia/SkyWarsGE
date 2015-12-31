@@ -4,6 +4,7 @@ version: 3.0
 author: Galaipa 
 description: SkyWars minijoko plugina
 depend: [WorldReset]
+softdepend: [Multiverse-Core]
 commands:
   skywars:
     description: Jokalarien SkyWars komandoa
