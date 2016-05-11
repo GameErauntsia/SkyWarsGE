@@ -73,7 +73,6 @@ public class ChestController {
              if (random.nextInt(100) + 1 <= chestItem.getChance()) {
                  inventory.setItem(randomLoc.get(added), chestItem.getItem());
                  if (added++ >= inventory.getSize()-9) {
-                     System.out.println(chest);
                      break;
                  }
              }

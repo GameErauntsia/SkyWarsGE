@@ -8,7 +8,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.block.Chest;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -67,8 +66,8 @@ public class GameListener implements Listener{
                       killed.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.RED + "Hil egin zara");
                       plugin.Broadcast(ChatColor.GREEN +"[SkyWars] " + ChatColor.RED + killed.getName() + " hil egin da");
                   }
-                  plugin.playerPoints.getAPI().give(killed.getUniqueId(), 20);
-                  killed.getPlayer().sendMessage(ChatColor.GREEN + "Zorionak! parte hartzeagatik 20 puntu irabazi dituzu");
+                  plugin.playerPoints.getAPI().give(killed.getUniqueId(), 5);
+                  killed.getPlayer().sendMessage(ChatColor.GREEN + "Zorionak! parte hartzeagatik 5 puntu irabazi dituzu");
                   plugin.resetPlayer(killed);
               }
           }
