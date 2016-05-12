@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,8 +43,8 @@ public class Gui implements Listener{
             joinGUI.addItem(item(Material.BRICK,14,1,ChatColor.GREEN + "*Eraikitzailea","-burdinazko pikotxa/-25 bloke"));
             joinGUI.addItem(item(Material.LEATHER_CHESTPLATE,0,1,ChatColor.GREEN  + "*Zalduna","-larruzko armadura"));
             joinGUI.setItem(7,item(Material.STAINED_GLASS_PANE,15,1,ChatColor.WHITE + "Aukeratu kit-a",""));
-            joinGUI.setItem(8,item(Material.STAINED_GLASS_PANE,15,1,ChatColor.WHITE + "Aukeratu kit-a",""));
         }
+        joinGUI.setItem(8,item(Material.EMERALD,15,1,ChatColor.YELLOW + "Puntuak","Zure puntuak: " + plugin.playerPoints.getAPI().look(p.getUniqueId())));
         if(p.hasPermission("sw.kit.troll")){
             joinGUI.addItem(item(Material.REDSTONE,0,1,ChatColor.GREEN  + "*Troll","-Diamantezko armadura osoa"));
         }else{
@@ -127,9 +128,12 @@ public class Gui implements Listener{
                 ItemStack clicked = event.getCurrentItem(); 
                 event.setCancelled(true);
                 if(clicked.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.BLUE + "Ikuslea")){
+                        player.closeInventory();
                         if(plugin.inGame){
-                            player.closeInventory();
-                          //  plugin.joinSpectator(player);
+                            player.teleport(plugin.spawn);
+                            plugin.Ikusleak.add(player);
+                            player.setScoreboard(plugin.board);
+                            player.setGameMode(GameMode.SPECTATOR);
                         }else{
                             player.sendMessage(ChatColor.GREEN +"[SkyWars] " +ChatColor.RED + "Ez da inor jolasten ari");
                         }

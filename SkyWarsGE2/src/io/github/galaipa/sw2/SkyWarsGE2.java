@@ -37,6 +37,7 @@ import org.bukkit.scoreboard.ScoreboardManager;
 public class SkyWarsGE2 extends JavaPlugin {
     ArrayList <Team> teams = new ArrayList<>();
     ArrayList <Player> Jokalariak = new ArrayList<>();
+    ArrayList <Player> Ikusleak = new ArrayList<>();
     Location spawn;
     Location lobby;
     Boolean inGame, bozketa,map,config = false;
@@ -62,6 +63,7 @@ public class SkyWarsGE2 extends JavaPlugin {
             SignListener.setJoinGui();
             hookPlayerPoints();
             setupPermissions();
+            loadLobby();
             }
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
@@ -77,8 +79,6 @@ public class SkyWarsGE2 extends JavaPlugin {
                     hasiera();    
                 }else if (args[0].equalsIgnoreCase("join")){
                    join(getServer().getPlayer(args[1]));
-                }else if (args[0].equalsIgnoreCase("proba")){
-                    amaiera();
                 }else if (args[0].equalsIgnoreCase("kutxak")){
                     if(config){
                         config = false;
@@ -152,7 +152,11 @@ public class SkyWarsGE2 extends JavaPlugin {
             }
     }
    public void resetPlayer(Player p){
-        loadLobby();
+       if(Ikusleak.contains(p)){
+           p.teleport(lobby);
+           p.setGameMode(GameMode.SURVIVAL);
+           return;
+       }
         Jokalariak.remove(p);
         Team t = getTeam(p);
         teams.remove(t);
@@ -233,6 +237,9 @@ task.runTaskTimer(this, 0L, 20L);
         p.teleport(lobby);
         p.setGameMode(GameMode.SURVIVAL);
         p.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.YELLOW +"Mila esker jolasteagatik");
+    }
+    for(Player p : Ikusleak){
+        resetPlayer(p);
     }
     defaultValues();
     WorldReset.resetWorld("SkyWars");

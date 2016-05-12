@@ -54,12 +54,12 @@ public class GameListener implements Listener{
               if(plugin.Jokalariak.contains(killed)){
                   if(e.getEntity().getKiller() != null){
                     if(e.getEntity().getKiller() instanceof Player){
-                    Player killer = e.getEntity().getKiller();
-                    e.setDeathMessage("");
-                    killed.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.RED + killer.getName() + "-(e)k hil zaitu");
-                    killer.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.GREEN + killed.getName() + " hil duzu");
-                    plugin.Broadcast(ChatColor.GREEN +"[SkyWars] " + ChatColor.RED + killer.getName() + "-(e)k " + killed.getName() + " hil du");
-                    killer.getWorld().playSound(killer.getLocation(),Sound.NOTE_STICKS, 10, 1);
+                        Player killer = e.getEntity().getKiller();
+                        e.setDeathMessage("");
+                        killed.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.RED + killer.getName() + "-(e)k hil zaitu");
+                        killer.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.GREEN + killed.getName() + " hil duzu");
+                        plugin.Broadcast(ChatColor.GREEN +"[SkyWars] " + ChatColor.RED + killer.getName() + "-(e)k " + killed.getName() + " hil du");
+                        killer.getWorld().playSound(killer.getLocation(),Sound.NOTE_STICKS, 10, 1);
                   }
                   }else{
                       e.setDeathMessage("");
