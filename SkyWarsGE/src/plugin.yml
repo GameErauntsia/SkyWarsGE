@@ -1,0 +1,35 @@
+name: SkyWarsGE2
+main: io.github.galaipa.sw2.SkyWarsGE2
+version: 3.0
+author: Galaipa 
+description: SkyWars minijoko plugina
+depend: [WorldReset,Vault,PlayerPoints]
+softdepend: [Multiverse-Core]
+commands:
+  skywars:
+    description: Jokalarien SkyWars komandoa
+    usage: /<command>  
+    aliases: [sw]
+  skywarsadmin:
+    description: Administratzaileen SkyWars komandoa
+    usage: /<command>  
+    aliases: [swadmin]  
+permissions:
+  sw.user:
+    description: Erabiltzaile komandoak erabiltzeko baimena
+    default: true
+  sw.admin:
+    description: Administratzaile komandoak erabiltzeko baimena
+    default: op
+  sw.kit.arkua:
+    description: Arkua kit-aren baimena
+    default: false
+  sw.kit.troll:
+    description: Troll kit-aren baimena
+    default: false
+  sw.kit.arrautza:
+    description: Arrautza kit-aren baimena
+    default: false
+  sw.kit.ezpata:
+    description: Ezpata kit-aren baimena
+    default: false
