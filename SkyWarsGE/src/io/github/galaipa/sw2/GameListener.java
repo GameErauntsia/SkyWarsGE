@@ -3,12 +3,12 @@ package io.github.galaipa.sw2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import net.minecraft.server.v1_8_R3.PacketPlayInClientCommand;
+import net.minecraft.server.v1_9_R2.PacketPlayInClientCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -59,7 +59,7 @@ public class GameListener implements Listener{
                         killed.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.RED + killer.getName() + "-(e)k hil zaitu");
                         killer.sendMessage(ChatColor.GREEN +"[SkyWars] " + ChatColor.GREEN + killed.getName() + " hil duzu");
                         plugin.Broadcast(ChatColor.GREEN +"[SkyWars] " + ChatColor.RED + killer.getName() + "-(e)k " + killed.getName() + " hil du");
-                        killer.getWorld().playSound(killer.getLocation(),Sound.NOTE_STICKS, 10, 1);
+                        killer.getWorld().playSound(killer.getLocation(),Sound.BLOCK_NOTE_BASEDRUM, 10, 1);
                   }
                   }else{
                       e.setDeathMessage("");
