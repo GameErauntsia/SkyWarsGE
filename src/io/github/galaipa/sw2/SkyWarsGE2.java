@@ -5,9 +5,9 @@ import de.goldengamerzone.worldreset.WorldReset;
 import static io.github.galaipa.sw2.GameListener.exPlayers;
 import java.util.ArrayList;
 import java.util.Random;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
+import net.minecraft.server.v1_10_R1.IChatBaseComponent;
+import net.minecraft.server.v1_10_R1.PacketPlayOutTitle;
+import net.minecraft.server.v1_10_R1.PlayerConnection;
 import org.black_ixx.playerpoints.PlayerPoints;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,7 +19,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -285,7 +285,7 @@ public static void sendTitle(Player player, Integer fadeIn, Integer stay, Intege
                 for(Player p : Jokalariak){
                     p.setLevel(countdown);
                     //p.sendMessage(ChatColor.GREEN + " " + countdown);
-                    p.getWorld().playSound(p.getLocation(),Sound.NOTE_STICKS, 10, 1);
+                    p.getWorld().playSound(p.getLocation(),Sound.BLOCK_NOTE_BASS, 10, 1);
                     sendTitle(p,20,40,20,ChatColor.YELLOW +Integer.toString(countdown),"");
                 }
                 countdown--;
@@ -303,7 +303,7 @@ public static void sendTitle(Player player, Integer fadeIn, Integer stay, Intege
                     Score ge = objective.getScore(ChatColor.GREEN + "GAME ERAUNTSIA" );
                     ge.setScore(0);
                     for(Team team : teams){
-                        team.getPlayer().getWorld().playSound(team.getPlayer().getLocation(),Sound.NOTE_PLING, 10, 1);
+                        team.getPlayer().getWorld().playSound(team.getPlayer().getLocation(),Sound.BLOCK_NOTE_BASS, 10, 1);
                         team.getPlayer().setScoreboard(board);
                         Block b =  team.getPlayer().getLocation().getBlock().getRelative(BlockFace.DOWN);
                         b.setType(Material.AIR); 
