@@ -3,11 +3,11 @@ package io.github.galaipa.sw2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import net.minecraft.server.v1_10_R1.PacketPlayInClientCommand;
+import net.minecraft.server.v1_11_R1.PacketPlayInClientCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
